@@ -1,6 +1,7 @@
 package br.com.senai.core.dao;
 
 import br.com.senai.core.dao.postgres.DaoPostgresCategoria;
+import br.com.senai.core.dao.postgres.DaoPostgresHorario;
 import br.com.senai.core.dao.postgres.DaoPostgresRestaurante;
 
 public class FactoryDao {
@@ -23,5 +24,9 @@ public class FactoryDao {
 		}
 		
 		return instance;
+	}
+	
+	public DaoHorario getDaoHorario() {
+		return new DaoPostgresHorario();
 	}
 }

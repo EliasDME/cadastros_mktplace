@@ -123,7 +123,7 @@ public class DaoPostgresRestaurante implements DaoRestaurante {
 	}
 
 	@Override
-	public void buscaPor(Restaurante id) {
+	public Restaurante buscaPor(int id) {
 		
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -131,14 +131,12 @@ public class DaoPostgresRestaurante implements DaoRestaurante {
 		try {
 			
 			ps = conexao.prepareStatement(BUSCAR_BY_ID);
-			ps.setInt(1, 1);
+			ps.setInt(1, id);
 			rs = ps.executeQuery();
 			if(rs.next()) {
 				return extrairDoResultSet(rs);
-			}else {
-				return null;
 			}
-			
+			return null;
 		} catch (Exception e) {
 			throw new RuntimeException("Ocorreu um erro ao buscar o restaurante. "
 					+ "Motivo: " + e.getMessage());
@@ -217,7 +215,7 @@ public class DaoPostgresRestaurante implements DaoRestaurante {
 			
 			Categoria categoria = new Categoria(idCategoria, nomeCategoria);
 			
-			return new Restaurante(idDoRestaurante, nomeCategoria, descricao, endereco, categoria);
+			return new Restaurante(idDoRestaurante, nomeDoRestaurante, descricao, endereco, categoria);
 			
 		} catch (Exception e) {
 			throw new RuntimeException("Ocorreu um erro ao extrair do restaurante. "

@@ -2,6 +2,7 @@ package br.com.senai.core.service;
 
 import java.util.List;
 
+import br.com.senai.core.dao.DaoHorario;
 import br.com.senai.core.dao.DaoRestaurante;
 import br.com.senai.core.dao.FactoryDao;
 import br.com.senai.core.domain.Categoria;
@@ -10,9 +11,11 @@ import br.com.senai.core.domain.Restaurante;
 public class RestauranteService {
 	
 	private DaoRestaurante dao;
+	private DaoHorario daoHorario;
 	
 	public RestauranteService() {
 		this.dao = FactoryDao.getInstance().getDaoRestaurante();
+		this.daoHorario = FactoryDao.getInstance().getDaoHorario();
 	}
 	
 	public void salvar(Restaurante restaurante) {
@@ -117,6 +120,16 @@ public class RestauranteService {
 	
 	public void excluirPor(int id) {
 		if(id > 0) {
+			
+			int qtdeDeHorario = daoHorario.contarPor(id);
+			
+			boolean isExisteHorarioVinculado = qtdeDeHorario > 0;
+			
+			if(isExisteHorarioVinculado) {
+				throw new IllegalArgumentException("Não foi possível excluir o restaurante. "
+						+ "Motivo: Existem " + qtdeDeHorario + " horários vinculados ao restaurante");
+			}
+			
 			this.dao.excluirPor(id);
 		}else {
 			throw new IllegalArgumentException("O id para exclusão deve ser maior que 0");
@@ -130,9 +143,13 @@ public class RestauranteService {
 			if(restauranteEncontrado == null) {
 				throw new IllegalArgumentException("Não existe restaurante vinculado ao id informado");
 			}
-		}else {
+			return restauranteEncontrado;
+		}
+			
+		else {
 			 throw new IllegalArgumentException("O id para busca não pode ser menor do que 0");
 		}
+		
 	}
 
 }

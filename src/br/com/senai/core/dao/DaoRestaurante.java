@@ -13,7 +13,7 @@ public interface DaoRestaurante {
 	
 	public void excluirPor(int id);
 	
-	public void buscaPor(Restaurante restaurante);
+	public Restaurante buscaPor(int restaurante);
 	
 	public List<Restaurante> listarPor(String nome, Categoria categoria);
 
